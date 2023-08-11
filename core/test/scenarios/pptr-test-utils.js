@@ -61,7 +61,7 @@ function createTestState() {
 
       before(async () => {
         this.browser = await puppeteer.launch({
-          headless: true,
+          headless: 'new',
           executablePath: getChromePath(),
           ignoreDefaultArgs: ['--enable-automation'],
         });
