@@ -67,7 +67,7 @@ describe('Lighthouse Viewer', () => {
 
     // start puppeteer
     browser = await puppeteer.launch({
-      headless: true,
+      headless: 'new',
       executablePath: getChromePath(),
     });
     viewerPage = await browser.newPage();
