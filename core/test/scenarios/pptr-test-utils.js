@@ -101,10 +101,6 @@ function getAuditsBreakdown(lhr) {
 
   const failedAudits = applicableAudits.filter(audit => audit.score !== null && audit.score < 1);
 
-  if (erroredAudits) {
-    console.error(JSON.stringify(erroredAudits, null, 2));
-  }
-
   return {auditResults, erroredAudits, failedAudits, notApplicableAudits};
 }
 
