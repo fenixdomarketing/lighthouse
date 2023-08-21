@@ -160,6 +160,13 @@
   --toplevel-warning-padding: 18px;
   --toplevel-warning-text-color: var(--report-text-color);
 
+  --lh-exp-gauge-palette-0: #1de9b6;
+  --lh-exp-gauge-palette-1: #7c4dff;
+  --lh-exp-gauge-palette-2: #ffb200;
+  --lh-exp-gauge-palette-3: #00affe;
+  --lh-exp-gauge-palette-4: #ff4181;
+  --lh-exp-gauge-palette-5: #a1a1a1;
+
   /* SVGs */
   --plugin-icon-url-dark: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="%23FFFFFF"><path d="M0 0h24v24H0z" fill="none"/><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7 1.49 0 2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"/></svg>');
   --plugin-icon-url: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="%23757575"><path d="M0 0h24v24H0z" fill="none"/><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7 1.49 0 2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"/></svg>');
@@ -1973,6 +1980,219 @@ details[open] .lh-clump-toggletext--hide { display: block;}
   .lh-meta__items {
     display: block;
   }
+}
+
+/* Explodey gauge */
+
+/*  the gauge! */
+
+
+.lh-exp-gauge circle {
+  stroke: currentcolor;
+  r: var(--radius);
+}
+
+.lh-exp-gauge text {
+  font-size: calc(var(--radius) * 0.2);
+  /* stroke-width: unset; */
+}
+
+
+.lh-exp-gauge {
+  margin: 0 auto;
+  width: 225px;
+  stroke-width: var(--stroke-width);
+  stroke-linecap: round;
+  
+  /* for better rendering perf */
+  contain: strict;
+  height: 225px;
+  will-change: transform;
+}
+.lh-exp-gauge--faded {
+  opacity: 0.1;
+}
+.lh-exp-gauge__wrapper {
+  font-family: var(--report-font-family-monospace);
+  text-align: center;
+  text-decoration: none;
+  transition: .3s;
+  cursor:default;
+}
+.lh-exp-gauge__wrapper--pass {
+  color: var(--color-pass);
+}
+.lh-exp-gauge__wrapper--average {
+  color: var(--color-average);
+}
+.lh-exp-gauge__wrapper--fail {
+  color: var(--color-fail);
+}
+.state--expanded {
+  color: var(--color-gray-600);
+  transition: color .3s;
+}
+.state--highlight {
+  color: var(--color-highlight);
+}
+.lh-exp-gauge__svg-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.lh-exp-gauge__cutout {
+  opacity: .999;
+  transition: opacity .3s;
+}
+.state--highlight .lh-exp-gauge__cutout {
+  opacity: 0;
+}
+
+.lh-exp-gauge__inner {
+  color: inherit;
+}
+.lh-exp-gauge__base {
+  fill: currentcolor;
+}
+
+
+.lh-exp-gauge__arc {
+  fill: none;
+  transition: opacity .3s;
+}
+.lh-exp-gauge__arc--metric {
+  color: var(--metric-color);
+  stroke-dashoffset: var(--metric-offset);
+}
+.lh-exp-gauge-hovertarget {
+  color: currentcolor;
+  opacity: 0.001;
+  stroke-linecap: butt;
+  stroke-width: 24;
+  /* hack. move the hover target out of the center. ideally i tweak the r instead but that rquires considerably more math. */
+  transform: scale(1.15);
+  /* I'll remove it when someone goes 'eh' */
+  cursor: help;
+}
+.lh-exp-gauge__arc--metric.lh-exp-gauge--miniarc {
+  opacity: 0;
+  stroke-dasharray: 0 calc(var(--circle-meas) * var(--radius));
+  transition: 0s .005s;
+}
+.state--expanded .lh-exp-gauge__arc--metric.lh-exp-gauge--miniarc {
+  opacity: .999;
+  stroke-dasharray: var(--metric-array);
+  transition: 0.3s; /*  calc(.005s + var(--i)*.05s); entrace animation */
+}
+.state--expanded .lh-exp-gauge__inner .lh-exp-gauge__arc {
+  opacity: 0;
+}
+
+
+.lh-exp-gauge .lh-exp-gauge__percentage {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  fill: currentcolor;
+  opacity: .999;
+  font-size: calc(var(--radius) * 0.625);
+  transition: opacity .3s ease-in;
+}
+.state--highlight .lh-exp-gauge__percentage {
+  opacity: 0;
+}
+
+.cover {
+  fill: none;
+  opacity: .001;
+  pointer-events: none;
+}
+.state--expanded .cover {
+  pointer-events: auto;
+}
+
+.metric {
+  transform: scale(var(--scale-initial));
+  opacity: 0;
+  transition: transform .1s .2s ease-out,  opacity .3s ease-out;
+  pointer-events: none;
+}
+.metric text {
+  pointer-events: none;
+}
+.metric__value {
+  fill: currentcolor;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.state--expanded .metric {
+  transform: scale(1);
+  opacity: .999;
+  transition: transform .3s ease-out,  opacity .3s ease-in,  stroke-width .1s ease-out;
+  transition-delay: calc(var(--i)*.05s);
+  pointer-events: auto;
+}
+.state--highlight .metric {
+  opacity: .3;
+}
+.state--highlight .metric--highlight {
+  opacity: .999;
+  stroke-width: calc(1.5*var(--stroke-width));
+}
+.state--highlight .metric--highlight .metric__value {
+  opacity: 0.999;
+}
+
+
+/*
+ the initial first load peek
+*/
+.lh-exp-gauge .lh-exp-gauge__bg {  /* needed for the use zindex stacking w/ transparency */
+  fill: var(--report-background-color);
+  stroke: var(--report-background-color);
+}
+.state--peek .metric {
+  transition-delay: 0ms;
+  animation: peek var(--peek-dur) cubic-bezier(0.46, 0.03, 0.52, 0.96);
+  animation-fill-mode: forwards;
+}
+.state--peek .lh-exp-gauge__inner .lh-exp-gauge__arc {
+  opacity: 1;
+}
+.state--peek .lh-exp-gauge__arc.lh-exp-gauge--faded {
+  opacity: 0.3; /* just a tad stronger cuz its fighting with a big solid arg */
+}
+/* do i need to set expanded and override this? */
+.state--peek .lh-exp-gauge__arc--metric.lh-exp-gauge--miniarc {
+  transition: opacity 0.3s;
+}
+.state--peek {
+  color: unset;
+}
+.state--peek .metric__label {
+  display: none;
+}
+
+
+@keyframes peek {
+  /* biggest it should go is 0.92. smallest is 0.8 */
+   0% { transform: scale(0.8); opacity: 0.8; }
+   50% {  transform: scale(0.92); opacity: 1; }
+   100% { transform: scale(0.8); opacity: 0.8; }
+ }
+
+
+/* for explody hax */
+thead,
+table td:nth-child(2),
+table td:nth-child(4),
+table td:nth-child(5),
+table td:nth-child(6),
+h2 {
+  /* display: none; */
+}
+
+.wrapper {
+  width: 620px;
 }
 
 
