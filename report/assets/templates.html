@@ -530,20 +530,21 @@ limitations under the License.
 
 <!-- Lighthouse score gauge - explodey version -->
 <template id="explodeyGauge">
-  <!-- lh-gauge__wrapper--${calculateRating(score)}' -->
-  <div class='lh-exp-gauge__wrapper'>
-    <div class='lh-exp-gauge__svg-wrapper'>
-      <svg class='lh-exp-gauge'>
-        <g class='lh-exp-gauge__inner'>
-          <circle class='lh-exp-gauge__bg' />
-          <circle class='lh-exp-gauge__base lh-exp-gauge--faded' />
-          <circle class='lh-exp-gauge__arc' />
-          <text class='lh-exp-gauge__percentage'></text>
-        </g>
-        <g class='lh-exp-gauge__outer'>
-          <circle class='cover' />
-        </g>
-      </svg>
+  <div class='lh-exp-gauge-component'>
+    <div class='lh-exp-gauge__wrapper'>
+      <div class='lh-exp-gauge__svg-wrapper'>
+        <svg class='lh-exp-gauge'>
+          <g class='lh-exp-gauge__inner'>
+            <circle class='lh-exp-gauge__bg' />
+            <circle class='lh-exp-gauge__base lh-exp-gauge--faded' />
+            <circle class='lh-exp-gauge__arc' />
+            <text class='lh-exp-gauge__percentage'></text>
+          </g>
+          <g class='lh-exp-gauge__outer'>
+            <circle class='cover' />
+          </g>
+        </svg>
+      </div>
     </div>
   </div>
 </template>

@@ -17,18 +17,20 @@ const delay = delay => new Promise(resolve => setTimeout(resolve, delay));
  */
 function createGauge(dom) {
   const docFrag = dom.createComponent('explodeyGauge');
-  return dom.find('.lh-exp-gauge__wrapper', docFrag);
+  return dom.find('.lh-exp-gauge-component', docFrag);
 }
 
 /**
- * @param {Element} wrapper
+ * @param {import('./dom.js').DOM} dom
+ * @param {Element} componentEl
  * @param {LH.ReportResult.Category} category
  */
-function updateGauge(wrapper, category) {
-  wrapper.className = '';
-  wrapper.classList.add('lh-exp-gauge__wrapper',
+function updateGauge(dom, componentEl, category) {
+  const wrapperEl = dom.find('.lh-exp-gauge__wrapper', componentEl);
+  wrapperEl.className = '';
+  wrapperEl.classList.add('lh-exp-gauge__wrapper',
     `lh-exp-gauge__wrapper--${ReportUtils.calculateRating(category.score)}`);
-  _setPerfGaugeExplodey(wrapper, category);
+  _setPerfGaugeExplodey(wrapperEl, category);
 }
 
 function _determineTrig(sizeSVG, percent, strokeWidth) {

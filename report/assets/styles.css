@@ -1987,18 +1987,18 @@ details[open] .lh-clump-toggletext--hide { display: block;}
 /*  the gauge! */
 
 
-.lh-exp-gauge circle {
+.lh-exp-gauge-component circle {
   stroke: currentcolor;
   r: var(--radius);
 }
 
-.lh-exp-gauge text {
+.lh-exp-gauge-component text {
   font-size: calc(var(--radius) * 0.2);
   /* stroke-width: unset; */
 }
 
 
-.lh-exp-gauge {
+.lh-exp-gauge-component .lh-exp-gauge {
   margin: 0 auto;
   width: 225px;
   stroke-width: var(--stroke-width);
@@ -2009,62 +2009,62 @@ details[open] .lh-clump-toggletext--hide { display: block;}
   height: 225px;
   will-change: transform;
 }
-.lh-exp-gauge--faded {
+.lh-exp-gauge-component .lh-exp-gauge--faded {
   opacity: 0.1;
 }
-.lh-exp-gauge__wrapper {
+.lh-exp-gauge-component .lh-exp-gauge__wrapper {
   font-family: var(--report-font-family-monospace);
   text-align: center;
   text-decoration: none;
   transition: .3s;
   cursor:default;
 }
-.lh-exp-gauge__wrapper--pass {
+.lh-exp-gauge-component .lh-exp-gauge__wrapper--pass {
   color: var(--color-pass);
 }
-.lh-exp-gauge__wrapper--average {
+.lh-exp-gauge-component .lh-exp-gauge__wrapper--average {
   color: var(--color-average);
 }
-.lh-exp-gauge__wrapper--fail {
+.lh-exp-gauge-component .lh-exp-gauge__wrapper--fail {
   color: var(--color-fail);
 }
-.state--expanded {
+.lh-exp-gauge-component .state--expanded {
   color: var(--color-gray-600);
   transition: color .3s;
 }
-.state--highlight {
+.lh-exp-gauge-component .state--highlight {
   color: var(--color-highlight);
 }
-.lh-exp-gauge__svg-wrapper {
+.lh-exp-gauge-component .lh-exp-gauge__svg-wrapper {
   display: flex;
   flex-direction: column-reverse;
 }
 
-.lh-exp-gauge__cutout {
+.lh-exp-gauge-component .lh-exp-gauge__cutout {
   opacity: .999;
   transition: opacity .3s;
 }
-.state--highlight .lh-exp-gauge__cutout {
+.lh-exp-gauge-component .state--highlight .lh-exp-gauge__cutout {
   opacity: 0;
 }
 
-.lh-exp-gauge__inner {
+.lh-exp-gauge-component .lh-exp-gauge__inner {
   color: inherit;
 }
-.lh-exp-gauge__base {
+.lh-exp-gauge-component .lh-exp-gauge__base {
   fill: currentcolor;
 }
 
 
-.lh-exp-gauge__arc {
+.lh-exp-gauge-component .lh-exp-gauge__arc {
   fill: none;
   transition: opacity .3s;
 }
-.lh-exp-gauge__arc--metric {
+.lh-exp-gauge-component .lh-exp-gauge__arc--metric {
   color: var(--metric-color);
   stroke-dashoffset: var(--metric-offset);
 }
-.lh-exp-gauge-hovertarget {
+.lh-exp-gauge-component .lh-exp-gauge-hovertarget {
   color: currentcolor;
   opacity: 0.001;
   stroke-linecap: butt;
@@ -2074,22 +2074,22 @@ details[open] .lh-clump-toggletext--hide { display: block;}
   /* I'll remove it when someone goes 'eh' */
   cursor: help;
 }
-.lh-exp-gauge__arc--metric.lh-exp-gauge--miniarc {
+.lh-exp-gauge-component .lh-exp-gauge__arc--metric.lh-exp-gauge--miniarc {
   opacity: 0;
   stroke-dasharray: 0 calc(var(--circle-meas) * var(--radius));
   transition: 0s .005s;
 }
-.state--expanded .lh-exp-gauge__arc--metric.lh-exp-gauge--miniarc {
+.lh-exp-gauge-component .state--expanded .lh-exp-gauge__arc--metric.lh-exp-gauge--miniarc {
   opacity: .999;
   stroke-dasharray: var(--metric-array);
   transition: 0.3s; /*  calc(.005s + var(--i)*.05s); entrace animation */
 }
-.state--expanded .lh-exp-gauge__inner .lh-exp-gauge__arc {
+.lh-exp-gauge-component .state--expanded .lh-exp-gauge__inner .lh-exp-gauge__arc {
   opacity: 0;
 }
 
 
-.lh-exp-gauge .lh-exp-gauge__percentage {
+.lh-exp-gauge-component .lh-exp-gauge__percentage {
   text-anchor: middle;
   dominant-baseline: middle;
   fill: currentcolor;
@@ -2097,48 +2097,48 @@ details[open] .lh-clump-toggletext--hide { display: block;}
   font-size: calc(var(--radius) * 0.625);
   transition: opacity .3s ease-in;
 }
-.state--highlight .lh-exp-gauge__percentage {
+.lh-exp-gauge-component .state--highlight .lh-exp-gauge__percentage {
   opacity: 0;
 }
 
-.cover {
+.lh-exp-gauge-component .cover {
   fill: none;
   opacity: .001;
   pointer-events: none;
 }
-.state--expanded .cover {
+.lh-exp-gauge-component .state--expanded .cover {
   pointer-events: auto;
 }
 
-.metric {
+.lh-exp-gauge-component .metric {
   transform: scale(var(--scale-initial));
   opacity: 0;
   transition: transform .1s .2s ease-out,  opacity .3s ease-out;
   pointer-events: none;
 }
-.metric text {
+.lh-exp-gauge-component .metric text {
   pointer-events: none;
 }
-.metric__value {
+.lh-exp-gauge-component .metric__value {
   fill: currentcolor;
   opacity: 0;
   transition: opacity 0.2s;
 }
-.state--expanded .metric {
+.lh-exp-gauge-component .state--expanded .metric {
   transform: scale(1);
   opacity: .999;
   transition: transform .3s ease-out,  opacity .3s ease-in,  stroke-width .1s ease-out;
   transition-delay: calc(var(--i)*.05s);
   pointer-events: auto;
 }
-.state--highlight .metric {
+.lh-exp-gauge-component .state--highlight .metric {
   opacity: .3;
 }
-.state--highlight .metric--highlight {
+.lh-exp-gauge-component .state--highlight .metric--highlight {
   opacity: .999;
   stroke-width: calc(1.5*var(--stroke-width));
 }
-.state--highlight .metric--highlight .metric__value {
+.lh-exp-gauge-component .state--highlight .metric--highlight .metric__value {
   opacity: 0.999;
 }
 
@@ -2146,29 +2146,29 @@ details[open] .lh-clump-toggletext--hide { display: block;}
 /*
  the initial first load peek
 */
-.lh-exp-gauge .lh-exp-gauge__bg {  /* needed for the use zindex stacking w/ transparency */
+.lh-exp-gauge-component .lh-exp-gauge__bg {  /* needed for the use zindex stacking w/ transparency */
   fill: var(--report-background-color);
   stroke: var(--report-background-color);
 }
-.state--peek .metric {
+.lh-exp-gauge-component .state--peek .metric {
   transition-delay: 0ms;
   animation: peek var(--peek-dur) cubic-bezier(0.46, 0.03, 0.52, 0.96);
   animation-fill-mode: forwards;
 }
-.state--peek .lh-exp-gauge__inner .lh-exp-gauge__arc {
+.lh-exp-gauge-component .state--peek .lh-exp-gauge__inner .lh-exp-gauge__arc {
   opacity: 1;
 }
-.state--peek .lh-exp-gauge__arc.lh-exp-gauge--faded {
+.lh-exp-gauge-component .state--peek .lh-exp-gauge__arc.lh-exp-gauge--faded {
   opacity: 0.3; /* just a tad stronger cuz its fighting with a big solid arg */
 }
 /* do i need to set expanded and override this? */
-.state--peek .lh-exp-gauge__arc--metric.lh-exp-gauge--miniarc {
+.lh-exp-gauge-component .state--peek .lh-exp-gauge__arc--metric.lh-exp-gauge--miniarc {
   transition: opacity 0.3s;
 }
-.state--peek {
+.lh-exp-gauge-component .state--peek {
   color: unset;
 }
-.state--peek .metric__label {
+.lh-exp-gauge-component .state--peek .metric__label {
   display: none;
 }
 
@@ -2180,20 +2180,18 @@ details[open] .lh-clump-toggletext--hide { display: block;}
    100% { transform: scale(0.8); opacity: 0.8; }
  }
 
-
 /* for explody hax */
-thead,
-table td:nth-child(2),
-table td:nth-child(4),
-table td:nth-child(5),
-table td:nth-child(6),
-h2 {
+.lh-exp-gauge-component thead,
+.lh-exp-gauge-component table td:nth-child(2),
+.lh-exp-gauge-component table td:nth-child(4),
+.lh-exp-gauge-component table td:nth-child(5),
+.lh-exp-gauge-component table td:nth-child(6),
+.lh-exp-gauge-component h2 {
   /* display: none; */
 }
 
-.wrapper {
+.lh-exp-gauge-component .wrapper {
   width: 620px;
 }
-
 
 /*# sourceURL=report-styles.css */
