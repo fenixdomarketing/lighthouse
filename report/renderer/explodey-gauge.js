@@ -2,15 +2,14 @@
  * @license Copyright 2023 The Lighthouse Authors. All Rights Reserved.
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
- */
-
-import {ReportUtils} from "./report-utils.js";
+*/
 
 /* eslint-env browser */
+/* eslint-disable max-len */
+
+import {ReportUtils} from './report-utils.js';
 
 /* Most of the impressive code here authored by Ana Tudor, Nov 2019 */
-
-const delay = delay => new Promise(resolve => setTimeout(resolve, delay));
 
 /**
  * @param {import('./dom.js').DOM} dom
@@ -26,11 +25,11 @@ function createGauge(dom) {
  * @param {LH.ReportResult.Category} category
  */
 function updateGauge(dom, componentEl, category) {
-  const wrapperEl = dom.find('.lh-exp-gauge__wrapper', componentEl);
+  const wrapperEl = dom.find('div.lh-exp-gauge__wrapper', componentEl);
   wrapperEl.className = '';
   wrapperEl.classList.add('lh-exp-gauge__wrapper',
     `lh-exp-gauge__wrapper--${ReportUtils.calculateRating(category.score)}`);
-  _setPerfGaugeExplodey(wrapperEl, category);
+  _setPerfGaugeExplodey(dom, wrapperEl, category);
 }
 
 function _determineTrig(sizeSVG, percent, strokeWidth) {
@@ -70,10 +69,11 @@ function _determineTrig(sizeSVG, percent, strokeWidth) {
 }
 
 /**
- * @param {HTMLAnchorElement} wrapper
+ * @param {import('./dom.js').DOM} dom
+ * @param {HTMLElement} wrapperEl
  * @param {LH.ReportResult.Category} category
  */
-function _setPerfGaugeExplodey(wrapper, category) {
+function _setPerfGaugeExplodey(dom, wrapperEl, category) {
   const sizeSVG = 128;
   const offsetSVG = -0.5 * sizeSVG;
 
@@ -91,29 +91,30 @@ function _setPerfGaugeExplodey(wrapper, category) {
     strokeGap,
   } = _determineTrig(sizeSVG, percent);
 
-  const SVG = wrapper.querySelector('.lh-exp-gauge');
+  const SVG = dom.find('svg.lh-exp-gauge', wrapperEl);
   const NS_URI = 'http://www.w3.org/2000/svg';
 
   SVG.setAttribute('viewBox', [offsetSVG, offsetSVG, sizeSVG, sizeSVG].join(' '));
   SVG.style.setProperty('--stroke-width', `${strokeWidth}px`);
-  SVG.style.setProperty('--circle-meas', 2 * Math.PI.toFixed(4));
+  SVG.style.setProperty('--circle-meas', (2 * Math.PI).toFixed(4));
 
-  const groupOuter = wrapper.querySelector('.lh-exp-gauge__outer');
-  const groupInner = wrapper.querySelector('.lh-exp-gauge__inner');
-  const cover = groupOuter.querySelector('.cover');
-  const gaugeArc = groupInner.querySelector('.lh-exp-gauge__arc');
-  const gaugePerc = groupInner.querySelector('.lh-exp-gauge__percentage');
+  const groupOuter = dom.find('g.lh-exp-gauge__outer', wrapperEl);
+  const groupInner = dom.find('g.lh-exp-gauge__inner', wrapperEl);
+  const cover = dom.find('circle.cover', groupOuter);
+  const gaugeArc = dom.find('circle.lh-exp-gauge__arc', groupInner);
+  const gaugePerc = dom.find('text.lh-exp-gauge__percentage', groupInner);
 
-  groupOuter.style.setProperty('--scale-initial', radiusInner / radiusOuter);
+  groupOuter.style.setProperty('--scale-initial', String(radiusInner / radiusOuter));
   groupOuter.style.setProperty('--radius', `${radiusOuter}px`);
   cover.style.setProperty('--radius', `${0.5 * (radiusInner + radiusOuter)}px`);
-  cover.setAttribute('stroke-width', strokeGap);
+  cover.setAttribute('stroke-width', String(strokeGap));
   SVG.style.setProperty('--radius', `${radiusInner}px`);
 
-  gaugeArc.setAttribute('stroke-dasharray', `${getArcLength()} ${(circumferenceInner - getArcLength()).toFixed(4)}`);
-  gaugeArc.setAttribute('stroke-dashoffset', 0.25 * circumferenceInner - endDiffInner);
+  gaugeArc.setAttribute('stroke-dasharray',
+    `${getArcLength()} ${(circumferenceInner - getArcLength()).toFixed(4)}`);
+  gaugeArc.setAttribute('stroke-dashoffset', String(0.25 * circumferenceInner - endDiffInner));
 
-  gaugePerc.textContent = Math.round(percent * 100);
+  gaugePerc.textContent = Math.round(percent * 100).toString();
 
   const radiusTextOuter = radiusOuter + strokeWidth;
   const radiusTextInner = radiusOuter - strokeWidth;
@@ -137,12 +138,12 @@ function _setPerfGaugeExplodey(wrapper, category) {
     const needsDomPopulation = !groupOuter.querySelector(`.metric--${alias}`);
 
     // HACK:This isn't ideal but it was quick. Create element during initialization or reuse existing during updates
-    const metricGroup = groupOuter.querySelector(`.metric--${alias}`) || document.createElementNS(NS_URI, 'g');
-    const metricArcMax = groupOuter.querySelector(`.metric--${alias} .lh-exp-gauge--faded`) || document.createElementNS(NS_URI, 'circle');
-    const metricArc = groupOuter.querySelector(`.metric--${alias} .lh-exp-gauge--miniarc`) || document.createElementNS(NS_URI, 'circle');
-    const metricArcHoverTarget = groupOuter.querySelector(`.metric--${alias} .lh-exp-gauge-hovertarget`) || document.createElementNS(NS_URI, 'circle');
-    const metricLabel = groupOuter.querySelector(`.metric--${alias} .metric__label`) || document.createElementNS(NS_URI, 'text');
-    const metricValue = groupOuter.querySelector(`.metric--${alias} .metric__value`) || document.createElementNS(NS_URI, 'text');
+    const metricGroup = dom.maybeFind(`g.metric--${alias}`, groupOuter) || document.createElementNS(NS_URI, 'g');
+    const metricArcMax = dom.maybeFind(`.metric--${alias} circle.lh-exp-gauge--faded`, groupOuter) || document.createElementNS(NS_URI, 'circle');
+    const metricArc = dom.maybeFind(`.metric--${alias} circle.lh-exp-gauge--miniarc`, groupOuter) || document.createElementNS(NS_URI, 'circle');
+    const metricArcHoverTarget = dom.maybeFind(`.metric--${alias} circle.lh-exp-gauge-hovertarget`, groupOuter) || document.createElementNS(NS_URI, 'circle');
+    const metricLabel = dom.maybeFind(`.metric--${alias} text.metric__label`, groupOuter) || document.createElementNS(NS_URI, 'text');
+    const metricValue = dom.maybeFind(`.metric--${alias} text.metric__value`, groupOuter) || document.createElementNS(NS_URI, 'text');
 
     metricGroup.classList.add('metric', `metric--${alias}`);
     metricArcMax.classList.add('lh-exp-gauge__arc', 'lh-exp-gauge__arc--metric', 'lh-exp-gauge--faded');
@@ -151,14 +152,14 @@ function _setPerfGaugeExplodey(wrapper, category) {
 
     const weightingPct = metric.weight / totalWeight;
     const metricLengthMax = getMetricArcLength(weightingPct);
-    const metricPercent = metric.result.score * weightingPct;
+    const metricPercent = metric.result.score ? metric.result.score * weightingPct : 0;
     const metricLength = getMetricArcLength(metricPercent);
     const metricOffset = weightingPct * circumferenceOuter;
     const metricHoverLength = getMetricArcLength(weightingPct, true);
 
     metricGroup.style.setProperty('--metric-color', `var(--lh-exp-gauge-palette-${i})`);
     metricGroup.style.setProperty('--metric-offset', `${offsetAdder}`);
-    metricGroup.style.setProperty('--i', i);
+    metricGroup.style.setProperty('--i', i.toString());
 
     metricArcMax.setAttribute('stroke-dasharray', `${metricLengthMax} ${circumferenceOuter - metricLengthMax}`);
     metricArc.style.setProperty('--metric-array', `${metricLength} ${circumferenceOuter - metricLength}`);
@@ -234,8 +235,8 @@ function _setPerfGaugeExplodey(wrapper, category) {
   peekGauge(SVG);
 
   /*
-    wrapper.state-expanded: gauge is exploded
-    wrapper.state-highlight: gauge is exploded and one of the metrics is being highlighted
+    wrapperEl.state-expanded: gauge is exploded
+    wrapperEl.state-highlight: gauge is exploded and one of the metrics is being highlighted
     metric.metric-highlight: highlight this particular metric
   */
   SVG.addEventListener('pointerover', e => {
@@ -268,7 +269,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
     // TODO: The hover target is a little small. ideally it's thicker.
     if (parent && parent.classList && parent.classList.contains('metric')) {
       // match the bg color of the gauge during a metric highlight
-      wrapper.style.setProperty('--color-highlight', `var(--lh-exp-gauge-palette-${parent.style.getPropertyValue('--i')})`);
+      wrapperEl.style.setProperty('--color-highlight', `var(--lh-exp-gauge-palette-${parent.style.getPropertyValue('--i')})`);
 
       if (!SVG.classList.contains('state--highlight')) {
         SVG.classList.add('state--highlight');
@@ -296,7 +297,7 @@ function _setPerfGaugeExplodey(wrapper, category) {
   // On the first run, tease with a little peek reveal
   async function peekGauge(SVG) {
     // Delay just a tad to let the user aclimatize beforehand.
-    await delay(1000);
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Early exit if it's already engaged
     if (SVG.classList.contains('state--expanded')) return;
@@ -315,8 +316,10 @@ function _setPerfGaugeExplodey(wrapper, category) {
     SVG.classList.add('state--peek', 'state--expanded');
 
     // Fancy double cleanup
-    const cleanup = _ => SVG.classList.remove('state--peek', 'state--expanded') || useElem.remove();
-    const tId = setTimeout(_ => {
+    const cleanup = () => {
+      SVG.classList.remove('state--peek', 'state--expanded') || useElem.remove();
+    };
+    const tId = setTimeout(() => {
       SVG.removeEventListener('mouseenter', handleEarlyInteraction);
       cleanup();
     }, peekDurationSec * 1000 * 1.5); // lil extra time just cuz
