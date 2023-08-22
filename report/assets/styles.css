@@ -1984,9 +1984,6 @@ details[open] .lh-clump-toggletext--hide { display: block;}
 
 /* Explodey gauge */
 
-/*  the gauge! */
-
-
 .lh-exp-gauge-component circle {
   stroke: currentcolor;
   r: var(--radius);
@@ -1996,7 +1993,6 @@ details[open] .lh-clump-toggletext--hide { display: block;}
   font-size: calc(var(--radius) * 0.2);
   /* stroke-width: unset; */
 }
-
 
 .lh-exp-gauge-component .lh-exp-gauge {
   margin: 0 auto;

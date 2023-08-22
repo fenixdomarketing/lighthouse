@@ -328,6 +328,11 @@ export class PerformanceCategoryRenderer extends CategoryRenderer {
     if (!options || options?.gatherMode === 'navigation') {
       const el = createGauge(this.dom);
       updateGauge(this.dom, el, category);
+      // Our gauge arc calculation is better.
+      // TODO: delete the old one and use this more directly within the component.
+      if (category.score) {
+        this._setGaugeArc(this.dom.find('circle.lh-exp-gauge__arc', el), category.score);
+      }
       this.dom.find('.lh-score__gauge', element).replaceWith(el);
     }
 
