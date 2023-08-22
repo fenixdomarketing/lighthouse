@@ -2097,12 +2097,12 @@ details[open] .lh-clump-toggletext--hide { display: block;}
   opacity: 0;
 }
 
-.lh-exp-gauge-component .cover {
+.lh-exp-gauge-component .lh-cover {
   fill: none;
   opacity: .001;
   pointer-events: none;
 }
-.lh-exp-gauge-component .state--expanded .cover {
+.lh-exp-gauge-component .state--expanded .lh-cover {
   pointer-events: auto;
 }
 

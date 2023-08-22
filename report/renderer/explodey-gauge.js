@@ -100,7 +100,7 @@ function _setPerfGaugeExplodey(dom, wrapperEl, category) {
 
   const groupOuter = dom.find('g.lh-exp-gauge__outer', wrapperEl);
   const groupInner = dom.find('g.lh-exp-gauge__inner', wrapperEl);
-  const cover = dom.find('circle.cover', groupOuter);
+  const cover = dom.find('circle.lh-cover', groupOuter);
   const gaugeArc = dom.find('circle.lh-exp-gauge__arc', groupInner);
   const gaugePerc = dom.find('text.lh-exp-gauge__percentage', groupInner);
 
@@ -138,12 +138,12 @@ function _setPerfGaugeExplodey(dom, wrapperEl, category) {
     const needsDomPopulation = !groupOuter.querySelector(`.metric--${alias}`);
 
     // HACK:This isn't ideal but it was quick. Create element during initialization or reuse existing during updates
-    const metricGroup = dom.maybeFind(`g.metric--${alias}`, groupOuter) || document.createElementNS(NS_URI, 'g');
-    const metricArcMax = dom.maybeFind(`.metric--${alias} circle.lh-exp-gauge--faded`, groupOuter) || document.createElementNS(NS_URI, 'circle');
-    const metricArc = dom.maybeFind(`.metric--${alias} circle.lh-exp-gauge--miniarc`, groupOuter) || document.createElementNS(NS_URI, 'circle');
-    const metricArcHoverTarget = dom.maybeFind(`.metric--${alias} circle.lh-exp-gauge-hovertarget`, groupOuter) || document.createElementNS(NS_URI, 'circle');
-    const metricLabel = dom.maybeFind(`.metric--${alias} text.metric__label`, groupOuter) || document.createElementNS(NS_URI, 'text');
-    const metricValue = dom.maybeFind(`.metric--${alias} text.metric__value`, groupOuter) || document.createElementNS(NS_URI, 'text');
+    const metricGroup = dom.maybeFind(`g.metric--${alias}`, groupOuter) || dom.createElementNS(NS_URI, 'g');
+    const metricArcMax = dom.maybeFind(`.metric--${alias} circle.lh-exp-gauge--faded`, groupOuter) || dom.createElementNS(NS_URI, 'circle');
+    const metricArc = dom.maybeFind(`.metric--${alias} circle.lh-exp-gauge--miniarc`, groupOuter) || dom.createElementNS(NS_URI, 'circle');
+    const metricArcHoverTarget = dom.maybeFind(`.metric--${alias} circle.lh-exp-gauge-hovertarget`, groupOuter) || dom.createElementNS(NS_URI, 'circle');
+    const metricLabel = dom.maybeFind(`.metric--${alias} text.metric__label`, groupOuter) || dom.createElementNS(NS_URI, 'text');
+    const metricValue = dom.maybeFind(`.metric--${alias} text.metric__value`, groupOuter) || dom.createElementNS(NS_URI, 'text');
 
     metricGroup.classList.add('metric', `metric--${alias}`);
     metricArcMax.classList.add('lh-exp-gauge__arc', 'lh-exp-gauge__arc--metric', 'lh-exp-gauge--faded');
@@ -220,7 +220,7 @@ function _setPerfGaugeExplodey(dom, wrapperEl, category) {
   });
 
   // Catch pointerover movement between the hovertarget arcs. Without this the metric-highlights can clear when moving between.
-  const underHoverTarget = groupOuter.querySelector(`.lh-exp-gauge-underhovertarget`) || document.createElementNS(NS_URI, 'circle');
+  const underHoverTarget = groupOuter.querySelector(`.lh-exp-gauge-underhovertarget`) || dom.createElementNS(NS_URI, 'circle');
   underHoverTarget.classList.add('lh-exp-gauge__arc', 'lh-exp-gauge__arc--metric', 'lh-exp-gauge-hovertarget', 'lh-exp-gauge-underhovertarget');
   const underHoverLength = getMetricArcLength(1, true);
   underHoverTarget.setAttribute('stroke-dasharray', `${underHoverLength} ${circumferenceOuter - underHoverLength - endDiffOuter}`);
@@ -306,7 +306,7 @@ function _setPerfGaugeExplodey(dom, wrapperEl, category) {
     const inner = SVG.querySelector('.lh-exp-gauge__inner');
     const id = `uniq-${Math.random()}`;
     inner.setAttribute('id', id);
-    const useElem = document.createElementNS(NS_URI, 'use');
+    const useElem = dom.createElementNS(NS_URI, 'use');
     useElem.setAttribute('href', `#${id}`);
     // for paint order this must come _after_ the outer.
     SVG.appendChild(useElem);
