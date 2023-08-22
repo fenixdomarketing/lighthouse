@@ -2168,6 +2168,9 @@ details[open] .lh-clump-toggletext--hide { display: block;}
   display: none;
 }
 
+.lh-exp-gauge-component .metric__label {
+  fill: var(--report-text-color);
+}
 
 @keyframes peek {
   /* biggest it should go is 0.92. smallest is 0.8 */

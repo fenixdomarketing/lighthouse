@@ -55,12 +55,12 @@ function _determineTrig(sizeSVG, percent, strokeWidth) {
     radiusOuter,
     circumferenceInner,
     circumferenceOuter,
-    getArcLength: _ => Math.max(0, Number((percent * circumferenceInner - 2 * endDiffInner).toFixed(4))),
+    getArcLength: () => Math.max(0, Number((percent * circumferenceInner))),
     // isButt case is for metricArcHoverTarget
     getMetricArcLength: (weightingPct, isButt) => {
       // TODO: this math isn't perfect butt it's very close.
       const linecapFactor = isButt ? 0 : 2 * endDiffOuter;
-      return Math.max(0, Number((weightingPct * circumferenceOuter - strokeGap - linecapFactor).toFixed(4)));
+      return Math.max(0, Number((weightingPct * circumferenceOuter - strokeGap - linecapFactor)));
     },
     endDiffInner,
     endDiffOuter,
