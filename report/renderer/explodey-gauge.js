@@ -156,8 +156,10 @@ function _setPerfGaugeExplodey(dom, wrapperEl, category) {
     const metricLength = getMetricArcLength(metricPercent);
     const metricOffset = weightingPct * circumferenceOuter;
     const metricHoverLength = getMetricArcLength(weightingPct, true);
+    const rating = ReportUtils.calculateRating(metric.result.score, metric.result.scoreDisplayMode);
 
-    metricGroup.style.setProperty('--metric-color', `var(--lh-exp-gauge-palette-${i})`);
+    metricGroup.style.setProperty('--metric-rating', rating);
+    metricGroup.style.setProperty('--metric-color', `var(--color-${rating}-secondary)`);
     metricGroup.style.setProperty('--metric-offset', `${offsetAdder}`);
     metricGroup.style.setProperty('--i', i.toString());
 
@@ -269,7 +271,8 @@ function _setPerfGaugeExplodey(dom, wrapperEl, category) {
     // TODO: The hover target is a little small. ideally it's thicker.
     if (parent && parent.classList && parent.classList.contains('metric')) {
       // match the bg color of the gauge during a metric highlight
-      wrapperEl.style.setProperty('--color-highlight', `var(--lh-exp-gauge-palette-${parent.style.getPropertyValue('--i')})`);
+      const metricRating = parent.style.getPropertyValue('--metric-rating');
+      wrapperEl.style.setProperty('--color-highlight', `var(--color-${metricRating}-secondary)`);
 
       if (!SVG.classList.contains('state--highlight')) {
         SVG.classList.add('state--highlight');
