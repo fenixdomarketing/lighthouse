@@ -2060,8 +2060,6 @@ details[open] .lh-clump-toggletext--hide { display: block;}
   stroke-width: 24;
   /* hack. move the hover target out of the center. ideally i tweak the r instead but that rquires considerably more math. */
   transform: scale(1.15);
-  /* I'll remove it when someone goes 'eh' */
-  cursor: help;
 }
 .lh-exp-gauge-component .lh-exp-gauge__arc--metric.lh-exp-gauge--miniarc {
   opacity: 0;
